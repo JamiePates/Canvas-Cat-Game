@@ -24,8 +24,6 @@ Canabalt.CYCLES_PER_SECOND = 45;
 // Map keys bound to jump action
 Canabalt.BIND_JUMP_KEYS = {'88': true, '67': true, '32': true}; // X, C, spacebar
 
-Canabalt.BIND_PAUSE_KEYS = {'80': true};
-
 Canabalt.DISTANCE_TO_METERS_COEFFICIENT = 0.055;
 
 Canabalt.PARALAX_BG_1_TOP_OFFSET = '100px';
@@ -43,12 +41,12 @@ Canabalt.PARALAX_FG_INITIAL_WAIT = 3000;
 Canabalt.SHAKE_START = 0;
 Canabalt.SHAKE_AMPLITUDE = 0;
 
-Canabalt.RUNNER_WIDTH = 50;
-Canabalt.RUNNER_HEIGHT = 29;
+Canabalt.RUNNER_WIDTH = 36;
+Canabalt.RUNNER_HEIGHT = 24;
 
 
 
-Canabalt.RUNNER_JUMPING_WIDTH = 50;
+Canabalt.RUNNER_JUMPING_WIDTH = 36;
 Canabalt.RUNNER_FALLING_ANIMATION_FREQ = 6; // Change falling frame every n cycles
 
 Canabalt.RUNNER_X_OFFSET_COEFFICIENT = 400;
@@ -199,17 +197,11 @@ Canabalt.prototype.startInputCapture = function() {
     if (Canabalt.BIND_JUMP_KEYS[String(event.keyCode)]) {
       me.startJump();
     }
-	if (Canabalt.BIND_PAUSE_KEYS[String(event.keyCode)]) {
-      game.stop();
-    }
   };
 
   document.onkeyup = function(event) {
     if (Canabalt.BIND_JUMP_KEYS[String(event.keyCode)]) {
       me.endJump();
-    }
-		if (Canabalt.BIND_PAUSE_KEYS[String(event.keyCode)]) {
-      game.start();
     }
   };
 };
