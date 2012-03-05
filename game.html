@@ -38,10 +38,11 @@
 
     #game .runner {
       position: absolute;
-      height: 26px;
+      height: 29px;
       width: 50px;
       background: url('images/runner.png');
       z-index: 5;
+	  margin-bottom: 0px;
     }
 
     #game .building1 {
@@ -147,11 +148,29 @@
       -webkit-border-radius: 5px;
       border-radius: 5px;
     }
+	a:active{
+		background: #222;
+	}
+	#note{
+		float: right;
+		margin: 0 5px 0 0;
+		padding: 0 5px 0 0;
+		font-family: sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+		color: #353535;
+	}
+	.m{
+		color: #222;
+		margin: 0;
+		padding: 0 5px 0 0;
+		display: inline;
+	}
   </style>
  
   <script type="text/javascript" src="js/canabalt.js"></script>
 </head>
-<body onLoad="game.stop(); document.getElementById('restartbutton').style.visibility='hidden';">
+<body onLoad="game.stop(); document.getElementById('restartbutton').style.visibility='hidden'";>
 
   <div id="wrapper">
     <div id="frame">
@@ -159,18 +178,19 @@
       <div id="game" ></div>
     </div>
     
-    <a href="#" onclick="if (
+    <a href="#" id="pausebutton" onclick="if (
     game.paused()) { game.start(); this.innerHTML = 'Pause'; document.getElementById('restartbutton').style.visibility='visible';} 
     else { game.stop(); this.innerHTML = 'Continue'; }; return false;">Start</a>
-   
    
     <a href="#" id="restartbutton" onclick="game.initialize(); return false;">Restart</a>
     
     <a href="#" id="jumpbutton" onMouseDown="game.startJump();" onMouseUp="game.endJump();">Jump</a>
+  	<div id="note">Welcome to the Cat Game!</div>
   </div>
+  
   <canvas id="myCanvas" width="976" height="104">
   <script type="text/javascript">
-    var game = new Canabalt(document.getElementById('game'), {fps: 40}).start();
+    var game = new Canabalt(document.getElementById('game'), {fps: 30}).start();
   </script>
   </canvas>
 </body>

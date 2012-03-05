@@ -1,3 +1,6 @@
+var pass = true;
+var final = 0;
+
 
 // Opera doesn't implement Date.now
 if (!Date.now) {
@@ -11,7 +14,6 @@ Canabalt = function(container, options) {
   this.container = container;
   this.viewportWidth = this.container.offsetWidth;
   this.buildings = [];
-
   // Milliseconds between frames
   this.mbf = 1000 / this.readOption('fps');
 
@@ -38,13 +40,9 @@ Canabalt.PARALAX_BG_2_SPEED = 0.03;
 Canabalt.PARALAX_FG_SPEED = 3;
 Canabalt.PARALAX_FG_INITIAL_WAIT = 3000;
 
-Canabalt.SHAKE_START = 0;
-Canabalt.SHAKE_AMPLITUDE = 0;
 
 Canabalt.RUNNER_WIDTH = 50;
 Canabalt.RUNNER_HEIGHT = 29;
-
-
 
 Canabalt.RUNNER_JUMPING_WIDTH = 50;
 Canabalt.RUNNER_FALLING_ANIMATION_FREQ = 6; // Change falling frame every n cycles
@@ -54,11 +52,11 @@ Canabalt.RUNNER_RUNNING_FRAMECOUNT = 16;
 Canabalt.RUNNER_RUNNING_CHANGE_FRAME_DISTANCE = 15;
 
 Canabalt.defaultOptions = {
-  fps: 60,
-  initialSpeed: 0.2,
-  acceleration: 0.0001,
-  jumpImpulse: 5.5,
-  gravity: 0.25
+  fps: 30,
+  initialSpeed: 0.3,
+  acceleration: 0.00001,
+  jumpImpulse: 18,
+  gravity: 1.25
 };
 
 Canabalt.prototype.readOption = function(option) {
@@ -73,7 +71,6 @@ Canabalt.prototype.initialize = function() {
   this.speed = this.readOption('initialSpeed');
   this.distance = 0;
 
-  this.shakeDuration = Canabalt.SHAKE_START;
   
   // Runner variables
   this.airborne = false;
@@ -107,13 +104,13 @@ Canabalt.prototype.initialize = function() {
   if (!this.paralaxBg2) {
     this.paralaxBg2 = this.createDiv('paralaxbg2');
   }
-  this.paralaxBg2Offset = 50;
+  this.paralaxBg2Offset = 0;
 
  // third paralax background
   if (!this.paralaxBg3) {
     this.paralaxBg3 = this.createDiv('paralaxbg3');
   }
-  this.paralaxBg3Offset = 70;
+  this.paralaxBg3Offset = 0;
   // Distance counter
   if (!this.distanceCounter) {
     this.distanceCounter = this.createDiv('distance');
@@ -129,8 +126,8 @@ Canabalt.prototype.initialize = function() {
   // absolute elements within it are positioned relative to its height
   // rather than its ancestor container
   this.container.style.height = String(this.container.offsetHeight) + 'px';
+	return this;
 
-  return this;
 };
 
 Canabalt.prototype.createDiv = function(className, skipInsert) {
@@ -229,9 +226,6 @@ Canabalt.prototype.endJump = function() {
 };
 
 
-Canabalt.prototype.shake = function(duration) {
-  this.shakeDuration = duration;
-};
 
 // In order to prevent setting the top offset of the viewport in each
 // frame in which there is no shaking, this is a separate method from draw()
@@ -270,13 +264,23 @@ Canabalt.prototype.draw = function() {
 
   // Draw distance counter
   this.distanceCounter.innerHTML = String(Math.round(this.distance * Canabalt.DISTANCE_TO_METERS_COEFFICIENT)) + 'm';
+  var dist = String(Math.round(this.distance * Canabalt.DISTANCE_TO_METERS_COEFFICIENT));
+  if(dist > 45){
+	  pass = false;
+	  final = dist;
+	  }
+	  else if
+		  (dist == 35){
+			  game.startJump();
+	  }
+	  else if
+		  (dist == 40){
+			  game.endJump();
+	  };
 
-  // Since shaking the screen is mostly a random process that doesn't affect gameplay,
-  // calculate the shaking offset when drawing a frame instead of each cycle
-  if (this.shakeDuration) {
-    this.container.style.top = String(Math.round(Math.random() * Canabalt.SHAKE_AMPLITUDE)) + 'px';
-  }
+  
 };
+
 
 // This is where most the game logic happens
 Canabalt.prototype.cycle = function() {
@@ -299,7 +303,32 @@ Canabalt.prototype.cycle = function() {
   this.speed += this.acceleration;
 
   // Runner's x offset is square root of the speed times a multiplier
-  this.x = Math.sqrt(this.speed) * Canabalt.RUNNER_X_OFFSET_COEFFICIENT;
+  this.x = 180;
+  var runnerx = this.x;
+  var runnery = this.y;
+//	console.log(runnery);
+//	console.log(runnerx);
+	if (pass == false && runnery <= 20){
+		
+		game.stop();
+		var i = Math.round(Math.random() * 6)
+		console.log(i);
+		var endnotes = new Array();
+		endnotes[0] = "You died but it's not all bad,";
+	    endnotes[1] = "You died but look on the bright side,";
+		endnotes[2] = "You died but don't feel too bad,";
+		endnotes[3] = "You died but it could of been worst,";
+		endnotes[4] = "You died but don't be hard on yourself,";
+		endnotes[5] = "You died but don't be discouraged,";
+		
+		
+		document.getElementById('note').innerHTML = endnotes[i] +' you got to <div class="m">'+final+'m </div> <a id="retry" href="javascript:location.reload(true)">Try Again</a>';
+		document.getElementById('pausebutton').style.visibility='hidden';
+		document.getElementById('restartbutton').style.visibility='hidden';
+		document.getElementById('jumpbutton').style.visibility='hidden';
+
+	};
+	
 
   // Check jump
   if (this.airborne) {
@@ -324,6 +353,7 @@ Canabalt.prototype.cycle = function() {
 
     var h = this.currentBuilding ? this.currentBuilding.height : 0;
 
+
     if (this.y <= h) {
       this.y = h;
       this.ySpeed = 0;
@@ -340,6 +370,7 @@ Canabalt.prototype.cycle = function() {
       ++this.runnerFrame;
     }
   }
+  
 
   // Move buildings
   for (var i = 0; i < this.buildings.length; ++i) {
@@ -351,15 +382,6 @@ Canabalt.prototype.cycle = function() {
   this.paralaxBg2Offset -= distance * Canabalt.PARALAX_BG_2_SPEED;
   this.paralaxBg3Offset -= distance * Canabalt.PARALAX_BG_3_SPEED;
 
-
-  // Shake it baby
-  if (this.shakeDuration) {
-    this.shakeDuration -= elapsed;
-    if (this.shakeDuration < 0) {
-      this.shakeDuration = 0;
-      this.staightenViewport();
-    }
-  }
 
   // Check if we need to redraw
   if (this.elapsed > this.mbf) {
@@ -377,8 +399,9 @@ Canabalt.Building = function(game, options) {
 
   this.width = 128 * Math.round(Math.random() * 5);
   this.height = 100 + Math.round(Math.random() * 50);
-  this.gap = Math.round(Math.random() * 200);
+  this.gap = Math.round(Math.random() * 120);
   this.totalWidth = this.width + this.gap;
+   
 
   this.left = this.game.viewportWidth;
 
@@ -397,6 +420,8 @@ Canabalt.Building = function(game, options) {
 
   this.draw();
 };
+
+
 
 Canabalt.Building.TYPE_NORMAL= 1;
 Canabalt.Building.TYPE_CRANE = 2;
@@ -440,4 +465,7 @@ Canabalt.Building.prototype.draw = function() {
     this.element.style.left = String(this.left) + 'px';
   }
   return this;
+ 
+  
 };
+
