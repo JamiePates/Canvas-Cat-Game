@@ -41,12 +41,12 @@ Canabalt.PARALAX_FG_INITIAL_WAIT = 3000;
 Canabalt.SHAKE_START = 0;
 Canabalt.SHAKE_AMPLITUDE = 0;
 
-Canabalt.RUNNER_WIDTH = 36;
-Canabalt.RUNNER_HEIGHT = 24;
+Canabalt.RUNNER_WIDTH = 50;
+Canabalt.RUNNER_HEIGHT = 29;
 
 
 
-Canabalt.RUNNER_JUMPING_WIDTH = 36;
+Canabalt.RUNNER_JUMPING_WIDTH = 50;
 Canabalt.RUNNER_FALLING_ANIMATION_FREQ = 6; // Change falling frame every n cycles
 
 Canabalt.RUNNER_X_OFFSET_COEFFICIENT = 400;
