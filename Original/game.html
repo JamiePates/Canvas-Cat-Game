@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canabalt Clone</title>
+  <style>
+    body {
+      background: #4D4D59;
+      margin: 0;
+      padding: 0;
+      padding-top: 45px;
+    }
+
+    #wrapper {
+      margin: 0 auto;
+      width: 976px;
+    }
+
+    #frame {
+      border: 6px solid #35353D;
+      border-right-color: #45454F;
+      border-bottom-color: #646A7D;
+      background: black;
+      height: 324px;
+      position: relative;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    #game {
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      top: 2px;
+      bottom: 2px;
+      background: #B0B0BF;
+      overflow: hidden;
+    }
+
+    #game .runner {
+      position: absolute;
+      height: 38px;
+      width: 24px;
+      background: url('runner.png');
+      z-index: 5;
+    }
+
+    #game .building {
+      position: absolute;
+      bottom: 0;
+      background: #B0B0BF url('windows.png');
+      background: url('building-top.png') left top repeat-x, url('windows.png') left 90px;
+      z-index: 3;
+    }
+
+    #game .paralaxbg1, #game .paralaxbg2 {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-repeat: repeat-x;
+    }
+
+    #game .paralaxbg1 {
+      background-image: url('paralax-bg-1.png');
+      z-index: 2;
+    }
+
+    #game .paralaxbg2 {
+      background-image: url('paralax-bg-2.png');
+      z-index: 1;
+    }
+
+    #game .paralaxbeam1, #game .paralaxbeam2 {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      z-index: 6;
+    }
+
+    #game .paralaxbeam1 {
+      width: 40px;
+      background: #35353D;
+    }
+
+    #game .paralaxbeam2 {
+      width: 128px;
+      background: url('paralax-fg-crossbeams.png');
+    }
+
+    #game .distance {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-family: sans-serif;
+      font-size: 15px;
+      font-weight: bolder;
+      color: white;
+      text-shadow: 2px 2px 0 black;
+      text-align: right;
+      z-index: 7;
+    }
+
+    a {
+      background: #35353C;
+      color: #4D4D59;
+      padding: 5px 7px;
+      font-family: sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+    }
+  </style>
+  <script type="text/javascript" src="canabalt.js"></script>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="frame">
+      <div id="game"></div>
+    </div>
+    <a href="#" onclick="if (game.paused()) { game.start(); this.innerHTML = 'Pause'; } else { game.stop(); this.innerHTML = 'Continue'; }; return false;">Pause</a>
+    <a href="#" onclick="game.initialize(); return false;">Restart</a>
+  </div>
+  <script type="text/javascript">
+    var game = new Canabalt(document.getElementById('game'), {fps: 40}).start();
+  </script>
+</body>
+</html>
